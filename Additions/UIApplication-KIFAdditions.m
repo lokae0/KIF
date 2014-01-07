@@ -14,6 +14,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import <objc/runtime.h>
 #import <objc/message.h>
+#import "KIF.h"
 
 MAKE_CATEGORIES_LOADABLE(UIApplication_KIFAdditions)
 
@@ -112,6 +113,12 @@ static const void *KIFRunLoopModesKey = &KIFRunLoopModesKey;
 
 - (BOOL)writeScreenshotForLine:(NSUInteger)lineNumber inFile:(NSString *)filename description:(NSString *)description error:(NSError **)error;
 {
+
+#ifdef DEVICE_TESTING
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *outputPath = [paths objectAtIndex:0];
+    
+#else
     NSString *outputPath = [[[NSProcessInfo processInfo] environment] objectForKey:@"KIF_SCREENSHOTS"];
     if (!outputPath) {
         if (error) {
@@ -119,6 +126,7 @@ static const void *KIFRunLoopModesKey = &KIFRunLoopModesKey;
         }
         return NO;
     }
+#endif
     
     NSArray *windows = [self windowsWithKeyWindow];
     if (windows.count == 0) {

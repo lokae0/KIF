@@ -13,3 +13,5 @@
 #import "KIFUITestActor.h"
 
 #import "SenTestCase-KIFAdditions.h"
+
+//#define DEVICE_TESTING  //Uncomment if testing on actual device instead of simulator.
